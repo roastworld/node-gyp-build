@@ -61,7 +61,7 @@ load.path = function (dir) {
   function resolve (dir) {
     // Find matching "prebuilds/<platform>-<arch>" directory
     let subDir = 'prebuilds';
-    if (process.platform === 'win32' && process.env.ENV === 'prod') {
+    if (process.platform === 'win32' && process.env.ENV !== 'development') {
       subDir = 'resources/prebuilds';
     }
     var tuples = readdirSync(path.join(dir, subDir)).map(parseTuple)
