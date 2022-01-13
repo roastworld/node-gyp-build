@@ -60,12 +60,16 @@ load.path = function (dir) {
 
   function resolve (dir) {
     // Find matching "prebuilds/<platform>-<arch>" directory
-    var tuples = readdirSync(path.join(dir, 'prebuilds')).map(parseTuple)
+    let subDir = 'prebuilds';
+    if (process.platform === 'win32' && process.env.ENV === 'prod') {
+      subDir = 'resources/prebuilds';
+    }
+    var tuples = readdirSync(path.join(dir, subDir)).map(parseTuple)
     var tuple = tuples.filter(matchTuple(platform, arch)).sort(compareTuples)[0]
     if (!tuple) return
 
     // Find most specific flavor first
-    var prebuilds = path.join(dir, 'prebuilds', tuple.name)
+    var prebuilds = path.join(dir, subDir, tuple.name)
     var parsed = readdirSync(prebuilds).map(parseTags)
     var candidates = parsed.filter(matchTags(runtime, abi))
     var winner = candidates.sort(compareTags(runtime))[0]
