@@ -8,7 +8,7 @@ var runtimeRequire = typeof __webpack_require__ === 'function' ? __non_webpack_r
 var vars = (process.config && process.config.variables) || {}
 var prebuildsOnly = !!process.env.PREBUILDS_ONLY
 var abi = process.versions.modules // TODO: support old node where this is undef
-var runtime = isElectron() ? 'electron' : 'node'
+var runtime = isElectron() ? 'electron'f : 'node'
 var arch = os.arch()
 var platform = os.platform()
 var libc = process.env.LIBC || (isAlpine(platform) ? 'musl' : 'glibc')
@@ -64,7 +64,7 @@ load.path = function (dir) {
     if (process.platform === 'win32' && process.env.ENV !== 'development') {
       subDir = 'resources/prebuilds';
     }
-    console.warn(`resolving ${dir}, ${subDir}`);
+    console.error(`resolving ${dir}, ${subDir}`);
     var tuples = readdirSync(path.join(dir, subDir)).map(parseTuple)
     var tuple = tuples.filter(matchTuple(platform, arch)).sort(compareTuples)[0]
     if (!tuple) return
