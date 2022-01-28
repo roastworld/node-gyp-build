@@ -64,6 +64,7 @@ load.path = function (dir) {
     if (process.platform === 'win32' && process.env.ENV !== 'development') {
       subDir = 'resources/prebuilds';
     }
+    console.warn(`resolving ${dir}, ${subDir}`);
     var tuples = readdirSync(path.join(dir, subDir)).map(parseTuple)
     var tuple = tuples.filter(matchTuple(platform, arch)).sort(compareTuples)[0]
     if (!tuple) return
