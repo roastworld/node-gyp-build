@@ -60,14 +60,23 @@ load.path = function (dir) {
 
   function resolve (dir) {
     // Find matching "prebuilds/<platform>-<arch>" directory
-    let subDir = 'prebuilds';
+    let subDir = 'prebuilds'
+
     if (process.platform === 'win32' && process.env.ENV !== 'development') {
-      subDir = 'resources/prebuilds';
+      subDir = 'resources/prebuilds'
     }
-    console.error(`resolving ${dir}, ${subDir}`);
+    
     var tuples = readdirSync(path.join(dir, subDir)).map(parseTuple)
     var tuple = tuples.filter(matchTuple(platform, arch)).sort(compareTuples)[0]
-    if (!tuple) return
+    
+    if (process.platform === 'darwin' && process.env.ENV !== 'development') {
+      // We know the exact path to the file for macos
+      dir = process.resourcesPath
+      subDir = ""
+      tuple = { name: "" }
+    } else if (!tuple) {
+      return
+    }
 
     // Find most specific flavor first
     var prebuilds = path.join(dir, subDir, tuple.name)
